@@ -1,3 +1,0 @@
-[submodule "vendors/php-opencloud"]
-	path = vendors/php-opencloud
-	url = git://github.com/zeroasterisk/php-opencloud.git
