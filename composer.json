@@ -3,6 +3,7 @@
   "description": "CDN Assets + md5 hash as part of the filename = always unique URL. A CakePHP Plugin/Lib to facilitate (for JS, CSS, Images, etc)",
   "type": "cakephp-plugin",
   "require": {
-    "cakephp/cakephp": ">=2.5.5.4 <3.0.0"
+    "cakephp/cakephp": ">=2.5.5.4 <3.0.0",
+    "rackspace/php-opencloud": "^1.16"
   }
 }
