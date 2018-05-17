@@ -4,6 +4,6 @@
   "type": "cakephp-plugin",
   "require": {
     "cakephp/cakephp": ">=2.5.5.4 <3.0.0",
-    "rackspace/php-opencloud": "^1.6"
+    "rackspace/php-opencloud": "~1.6.0"
   }
 }
