@@ -108,30 +108,30 @@ class Cdnmd5Test extends CakeTestCase {
 	public function test_setConfig() {
 		$_this = Cdnmd5::getInstance();
 		$_this->setConfig(array('newkey' => 'newval', 'CDN' => array('container' => 'unittests')));
-		$this->assertEqual('newval', $_this->config['newkey']);
-		$this->assertEqual('unittests', $_this->config['CDN']['container']);
+		$this->assertEquals('newval', $_this->config['newkey']);
+		$this->assertEquals('unittests', $_this->config['CDN']['container']);
 		// verify that the path gets prefixed with the APP path
 		$this->assertTrue(false === strpos($_this->config['Config']['path'], 'cruft' . APP));
 		$this->assertFalse(false === strpos($_this->config['Config']['path'], APP));
-		$this->assertEqual('/', substr($_this->config['Config']['path'], 0, 1));
-		$this->assertEqual('/', substr($_this->config['Config']['path'], -1));
+		$this->assertEquals('/', substr($_this->config['Config']['path'], 0, 1));
+		$this->assertEquals('/', substr($_this->config['Config']['path'], -1));
 	}
 
 	/**
 	 */
 	public function test_cleanFilename() {
 		$input = 'something-cool_here.png';
-		$this->assertEqual('something-cool_here.png', Cdnmd5::cleanFilename($input));
+		$this->assertEquals('something-cool_here.png', Cdnmd5::cleanFilename($input));
 		$input = 'something-cool_here.png?blah-blah=blah';
-		$this->assertEqual('something-cool_here.png', Cdnmd5::cleanFilename($input));
+		$this->assertEquals('something-cool_here.png', Cdnmd5::cleanFilename($input));
 		$input = 'something-cool!here.png';
-		$this->assertEqual('something-cool_here.png', Cdnmd5::cleanFilename($input));
+		$this->assertEquals('something-cool_here.png', Cdnmd5::cleanFilename($input));
 		$input = 'something-cool here.png';
-		$this->assertEqual('something-cool_here.png', Cdnmd5::cleanFilename($input));
+		$this->assertEquals('something-cool_here.png', Cdnmd5::cleanFilename($input));
 		$input = "something-cool\n\%\$^*(*)#$%here.png";
-		$this->assertEqual('something-cool_here.png', Cdnmd5::cleanFilename($input));
+		$this->assertEquals('something-cool_here.png', Cdnmd5::cleanFilename($input));
 		$input = 'something-cool%20here.png';
-		$this->assertEqual('something-cool_20here.png', Cdnmd5::cleanFilename($input));
+		$this->assertEquals('something-cool_20here.png', Cdnmd5::cleanFilename($input));
 	}
 
 	/**
@@ -139,13 +139,13 @@ class Cdnmd5Test extends CakeTestCase {
 	 */
 	public function text_cleanWWW() {
 		// simple passthrough, no cleanFilename or anything
-		$this->assertEqual('something!cool.png', Cdnmd5::cleanWWW('something!cool.png'));
+		$this->assertEquals('something!cool.png', Cdnmd5::cleanWWW('something!cool.png'));
 		// but we do strip off APP & WWW_ROOT paths
-		$this->assertEqual('/path/file.png', Cdnmd5::cleanWWW(APP . 'path/file.png'));
-		$this->assertEqual('/path/file.png', Cdnmd5::cleanWWW(WWW_ROOT . 'path/file.png'));
+		$this->assertEquals('/path/file.png', Cdnmd5::cleanWWW(APP . 'path/file.png'));
+		$this->assertEquals('/path/file.png', Cdnmd5::cleanWWW(WWW_ROOT . 'path/file.png'));
 		// and we also strip off '/webroot/' and anything before it
-		$this->assertEqual('/path/file.png', Cdnmd5::cleanWWW('/something/webroot/path/file.png'));
-		$this->assertEqual('/path/file.png', Cdnmd5::cleanWWW(WWW_ROOT . 'some/webroot/webroot/path/file.png'));
+		$this->assertEquals('/path/file.png', Cdnmd5::cleanWWW('/something/webroot/path/file.png'));
+		$this->assertEquals('/path/file.png', Cdnmd5::cleanWWW(WWW_ROOT . 'some/webroot/webroot/path/file.png'));
 	}
 
 	/**
@@ -154,9 +154,9 @@ class Cdnmd5Test extends CakeTestCase {
 	public function text_getFullPath() {
 		$expect = $input = WWW_ROOT . 'index.php';
 		// simple passthrough, no cleanFilename or anything
-		$this->assertEqual($expect, Cdnmd5::getFullPath($input));
+		$this->assertEquals($expect, Cdnmd5::getFullPath($input));
 		$input = Cdnmd5::cleanWWW($expect);
-		$this->assertEqual($expect, Cdnmd5::getFullPath($input));
+		$this->assertEquals($expect, Cdnmd5::getFullPath($input));
 		$this->assertFalse(Cdnmd5::getFullPath($input . 'no-exist'));
 	}
 
@@ -165,22 +165,22 @@ class Cdnmd5Test extends CakeTestCase {
 	public function test_getConfigFile() {
 		$expect = $this->Config_path . 'something-cool_here.png.md5';
 		$input = 'something-cool_here.png';
-		$this->assertEqual($expect, Cdnmd5::getConfigFile($input));
+		$this->assertEquals($expect, Cdnmd5::getConfigFile($input));
 		$input = 'somepath/something-cool_here.png';
 		$expect = $this->Config_path . 'somepath_something-cool_here.png.md5';
-		$this->assertEqual($expect, Cdnmd5::getConfigFile($input));
+		$this->assertEquals($expect, Cdnmd5::getConfigFile($input));
 		$input = '/any/old/path/something-cool_here.png?blah-blah=blah';
 		$expect = $this->Config_path . 'any_old_path_something-cool_here.png.md5';
-		$this->assertEqual($expect, Cdnmd5::getConfigFile($input));
+		$this->assertEquals($expect, Cdnmd5::getConfigFile($input));
 		$input = APP . 'special-path/something-cool!here.png';
 		$expect = $this->Config_path . 'special-path_something-cool_here.png.md5';
-		$this->assertEqual($expect, Cdnmd5::getConfigFile($input));
+		$this->assertEquals($expect, Cdnmd5::getConfigFile($input));
 		$input = WWW_ROOT . 'special-path/something-cool!here.png';
 		$expect = $this->Config_path . 'special-path_something-cool_here.png.md5';
-		$this->assertEqual($expect, Cdnmd5::getConfigFile($input));
+		$this->assertEquals($expect, Cdnmd5::getConfigFile($input));
 		$input = APP . 'View/special-path/something-cool!here.png';
 		$expect = $this->Config_path . 'special-path_something-cool_here.png.md5';
-		$this->assertEqual($expect, Cdnmd5::getConfigFile($input));
+		$this->assertEquals($expect, Cdnmd5::getConfigFile($input));
 	}
 
 	/**
@@ -188,9 +188,9 @@ class Cdnmd5Test extends CakeTestCase {
 	public function test_makeHash() {
 		$this->assertTrue(file_exists($this->testfile_js));
 		$this->assertFalse(file_exists(Cdnmd5::getConfigFile($this->testfile_js)));
-		$this->assertEqual($this->testfile_js_hash, Cdnmd5::makeHash($this->testfile_js));
+		$this->assertEquals($this->testfile_js_hash, Cdnmd5::makeHash($this->testfile_js));
 		$this->assertTrue(file_exists(Cdnmd5::getConfigFile($this->testfile_js)));
-		$this->assertEqual($this->testfile_js_hash, file_get_contents(Cdnmd5::getConfigFile($this->testfile_js)));
+		$this->assertEquals($this->testfile_js_hash, file_get_contents(Cdnmd5::getConfigFile($this->testfile_js)));
 	}
 
 	/**
@@ -202,9 +202,9 @@ class Cdnmd5Test extends CakeTestCase {
 		$this->assertFalse(file_exists(Cdnmd5::getConfigFile($this->testfile_js)));
 		$this->assertFalse(Cdnmd5::getHash($this->testfile_js));
 		// make hash
-		$this->assertEqual($this->testfile_js_hash, Cdnmd5::makeHash($this->testfile_js));
+		$this->assertEquals($this->testfile_js_hash, Cdnmd5::makeHash($this->testfile_js));
 		$this->assertTrue(file_exists(Cdnmd5::getConfigFile($this->testfile_js)));
-		$this->assertEqual($this->testfile_js_hash, Cdnmd5::getHash($this->testfile_js));
+		$this->assertEquals($this->testfile_js_hash, Cdnmd5::getHash($this->testfile_js));
 	}
 
 	/**
@@ -213,11 +213,11 @@ class Cdnmd5Test extends CakeTestCase {
 	public function test_getCdnfilename_js() {
 		$input = $this->testfile_js;
 		$this->assertFalse(Cdnmd5::getCdnfilename($input));
-		$this->assertEqual($this->testfile_js_hash, Cdnmd5::makeHash($this->testfile_js));
+		$this->assertEquals($this->testfile_js_hash, Cdnmd5::makeHash($this->testfile_js));
 		$expect = Cdnmd5::cleanWWW($this->testfile_js);
 		$expect = str_replace('.js', '_' . $this->testfile_js_hash . '.js', $expect);
 		$expect = trim($expect, '/');
-		$this->assertEqual($expect, Cdnmd5::getCdnfilename($input));
+		$this->assertEquals($expect, Cdnmd5::getCdnfilename($input));
 	}
 
 	/**
@@ -226,11 +226,11 @@ class Cdnmd5Test extends CakeTestCase {
 	public function test_getCdnfilename_css() {
 		$input = $this->testfile_css;
 		$this->assertFalse(Cdnmd5::getCdnfilename($input));
-		$this->assertEqual($this->testfile_css_hash, Cdnmd5::makeHash($this->testfile_css));
+		$this->assertEquals($this->testfile_css_hash, Cdnmd5::makeHash($this->testfile_css));
 		$expect = Cdnmd5::cleanWWW($this->testfile_css);
 		$expect = str_replace('.css', '_' . $this->testfile_css_hash . '.css', $expect);
 		$expect = trim($expect, '/');
-		$this->assertEqual($expect, Cdnmd5::getCdnfilename($input));
+		$this->assertEquals($expect, Cdnmd5::getCdnfilename($input));
 	}
 
 	/**
@@ -244,16 +244,16 @@ class Cdnmd5Test extends CakeTestCase {
 		// missing hash
 		$input = $this->testfile_js;
 		$expect_local = '/js/' . basename($input);
-		$this->assertEqual($expect_local, Cdnmd5::url($input));
+		$this->assertEquals($expect_local, Cdnmd5::url($input));
 		// make hash
-		$this->assertEqual($this->testfile_js_hash, Cdnmd5::makeHash($this->testfile_js));
+		$this->assertEquals($this->testfile_js_hash, Cdnmd5::makeHash($this->testfile_js));
 		$_this = Cdnmd5::getInstance();
 		$expect = $_this->config['CDN']['http'] . '/' . $_this->getCdnfilename($this->testfile_js);
-		$this->assertEqual($expect, Cdnmd5::url($input));
+		$this->assertEquals($expect, Cdnmd5::url($input));
 		// disable (back to local)
 		$_this = Cdnmd5::getInstance();
 		$_this->config['Presentation']['disabled'] = true;
-		$this->assertEqual($expect_local, Cdnmd5::url($input));
+		$this->assertEquals($expect_local, Cdnmd5::url($input));
 	}
 
 	/**
@@ -269,16 +269,16 @@ class Cdnmd5Test extends CakeTestCase {
 	public function test_purge() {
 		$purgedFilesInt = Cdnmd5::purge('-1 day');
 		// ensure THIS file exists as a valid hash
-		$this->assertEqual($this->testfile_js_hash, Cdnmd5::makeHash($this->testfile_js));
+		$this->assertEquals($this->testfile_js_hash, Cdnmd5::makeHash($this->testfile_js));
 		$purgedFilesInt = Cdnmd5::purge('-1 day');
-		$this->assertEqual(0, $purgedFilesInt);
+		$this->assertEquals(0, $purgedFilesInt);
 		// remove THIS file as a valid hash
 		@unlink(Cdnmd5::getConfigFile($this->testfile_js));
 		$purgedFilesInt = Cdnmd5::purge('+1 day');
 		// NOTE: this may not work, if this file was modified and uploaded in
 		// less than 1 sec... (hash/modified timstampes will differ)
 		//   also there are a few hours timezone discrepancies...
-		#$this->assertEqual(1, $purgedFilesInt);
+		#$this->assertEquals(1, $purgedFilesInt);
 		$this->assertTrue($purgedFilesInt > 0 && $purgedFilesInt < 10);
 		// TODO: idea for better test, upload some "trash" files and ensure those are purged
 	}
@@ -298,13 +298,13 @@ class Cdnmd5Test extends CakeTestCase {
 			'/img/cdnmd5test-missing-file.png',
 		);
 		$content = file_get_contents($this->testfile_css);
-		$this->assertEqual($expect, Cdnmd5::parseUrlsFromCSS($content));
+		$this->assertEquals($expect, Cdnmd5::parseUrlsFromCSS($content));
 		$expect = array();
-		$this->assertEqual($expect, Cdnmd5::parseUrlsFromCSS(null));
-		$this->assertEqual($expect, Cdnmd5::parseUrlsFromCSS(true));
-		$this->assertEqual($expect, Cdnmd5::parseUrlsFromCSS(false));
-		$this->assertEqual($expect, Cdnmd5::parseUrlsFromCSS(''));
-		$this->assertEqual($expect, Cdnmd5::parseUrlsFromCSS('.example-css { color: funky; }'));
+		$this->assertEquals($expect, Cdnmd5::parseUrlsFromCSS(null));
+		$this->assertEquals($expect, Cdnmd5::parseUrlsFromCSS(true));
+		$this->assertEquals($expect, Cdnmd5::parseUrlsFromCSS(false));
+		$this->assertEquals($expect, Cdnmd5::parseUrlsFromCSS(''));
+		$this->assertEquals($expect, Cdnmd5::parseUrlsFromCSS('.example-css { color: funky; }'));
 	}
 
 	/**
@@ -314,17 +314,17 @@ class Cdnmd5Test extends CakeTestCase {
 		$basedir = dirname(Cdnmd5::cleanWWW($this->testfile_css));
 		$input = '/img/cdnmd5test.png';
 		$expect = $input;
-		$this->assertEqual($expect, Cdnmd5::cssFilepathNormalize($input, $basedir));
+		$this->assertEquals($expect, Cdnmd5::cssFilepathNormalize($input, $basedir));
 		$input = 'img/cdnmd5test.png';
 		$expect = '/css/img/cdnmd5test.png';
-		$this->assertEqual($expect, Cdnmd5::cssFilepathNormalize($input, $basedir));
+		$this->assertEquals($expect, Cdnmd5::cssFilepathNormalize($input, $basedir));
 		$input = '../img/cdnmd5test.png';
 		$expect = '/css/../img/cdnmd5test.png';
-		$this->assertEqual($expect, Cdnmd5::cssFilepathNormalize($input, $basedir));
+		$this->assertEquals($expect, Cdnmd5::cssFilepathNormalize($input, $basedir));
 		// no validation for exising file in this method
 		$input = '/img/image-does-not-exist.png';
 		$expect = $input;
-		$this->assertEqual($expect, Cdnmd5::cssFilepathNormalize($input, $basedir));
+		$this->assertEquals($expect, Cdnmd5::cssFilepathNormalize($input, $basedir));
 	}
 
 	/**
@@ -333,7 +333,7 @@ class Cdnmd5Test extends CakeTestCase {
 	 */
 	public function test_translate() {
 		// do nothing for js or any other type of files
-		$this->assertEqual($this->testfile_js, Cdnmd5::makeTranslation($this->testfile_js));
+		$this->assertEquals($this->testfile_js, Cdnmd5::makeTranslation($this->testfile_js));
 		// translate css files
 		$expect = str_replace('.css', '_translated.css', $this->testfile_css);
 		try {
