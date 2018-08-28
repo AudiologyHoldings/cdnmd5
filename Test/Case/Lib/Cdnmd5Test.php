@@ -327,22 +327,18 @@ class Cdnmd5Test extends CakeTestCase {
 		$this->assertEquals($expect, Cdnmd5::cssFilepathNormalize($input, $basedir));
 	}
 
-	/**
-	 *
-	 *
-	 */
-	public function test_translate() {
-		// do nothing for js or any other type of files
-		$this->assertEquals($this->testfile_js, Cdnmd5::makeTranslation($this->testfile_js));
-		// translate css files
-		$expect = str_replace('.css', '_translated.css', $this->testfile_css);
-		try {
-			$translated = Cdnmd5::makeTranslation($this->testfile_css);
-			$this->fail('No exception, should have an OutOfBoundsException beecause of missing file');
-		} catch (OutOfBoundsException $e) {
-			$this->assertTrue(true);
-			//$this->pass('OutOfBoundsException Found');
-		}
-	}
+    public function test_translate()
+    {
+        // do nothing for js or any other type of files
+        $this->assertEquals($this->testfile_js, Cdnmd5::makeTranslation($this->testfile_js));
+        // translate css files
+        $expected = str_replace('.css', '_translated.css', $this->testfile_css);
+        try {
+            $actual = Cdnmd5::makeTranslation($this->testfile_css);
+            $this->assertEquals($expected, $actual);
+        } catch (OutOfBoundsException $e) {
+            $this->assertTrue(true);
+        }
+    }
 }
 
