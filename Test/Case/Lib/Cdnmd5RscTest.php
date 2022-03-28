@@ -6,7 +6,7 @@
  */
 App::Import('Lib', 'Cdnmd5.Cdnmd5');
 
-class Cdnmd5Test extends CakeTestCase {
+class Cdnmd5RscTest extends CakeTestCase {
 
 	// set in startTest
 	public $path_config = null;
