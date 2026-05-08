@@ -25,7 +25,8 @@ $config = array(
 			'path' => /* APP */ 'Config/cdnmd5/',
 		),
 		// configuration for the CDN
-		'CDN' => array(
+		/* // RSC example
+        'CDN' => array(
 			'type' => 'RSC',
 			// the CDN container
 			'container' => 'cdnmd5',
@@ -41,7 +42,21 @@ $config = array(
 				'key' => 'yourapikey',
 				//'account' => 'youraccountnumber', // not needed anymore
 			),
-		),
+		),*/
+        // S3 example
+        'CDN' => array(
+            'type' => 'S3',
+            // the CDN container
+            'directory' => 'cdnmd5', // top level directory in the bucket
+            'region' => 'us-east-2',
+            'bucket' => Configure::read('env') != 'prod' ? 'qa-assets' : 'assets',
+            'http' => Configure::read('env') != 'prod' ? 'http://assets-qa.mysite.com' : 'http://assets.mysite.com',
+            'https' => Configure::read('env') != 'prod' ? 'https://assets-qa.mysite.com' : 'https://assets.mysite.com',
+            'auth' => array(
+                'access_key' => Configure::read('AWS.access_key'), // adjust as needed
+                'secret_key' => Configure::read('AWS.secret_key'), // adjust as needed
+            ),
+        ),
 		// configuration for purging/cleanup
 		'Purge' => array(
 			// what's the default age of old files to start considering
