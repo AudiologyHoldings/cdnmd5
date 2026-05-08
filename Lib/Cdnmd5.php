@@ -495,6 +495,9 @@ Class Cdnmd5 {
 			}
 		}
 		$start = trim($_this->config['CDN'][$protocol], '/');
+        if (isset($_this->config['CDN']['directory']) && !empty($_this->config['CDN']['directory'])) {
+            $start .= '/' . trim($_this->config['CDN']['directory'], '/');
+        }
 		$cdnfilename = trim($cdnfilename, '/');
 		return "{$start}/{$cdnfilename}";
 	}
@@ -570,7 +573,8 @@ Class Cdnmd5 {
 			return Cdnmd5Rsc::transfer($filepath, $cdnfilename, $_this->config);
 		}
 		if ($_this->config['CDN']['type'] == 'S3') {
-			throw new OutOfBoundsException('Cdnmd5::transfer - sorry, we have not built S3 support yet :(');
+			require_once(dirname(__file__) . '/Cdnmd5S3.php');
+			return Cdnmd5S3::transfer($filepath, $cdnfilename, $_this->config);
 		}
 		throw new OutOfBoundsException('Cdnmd5::transfer - unknown CDN type');
 	}
@@ -611,7 +615,8 @@ Class Cdnmd5 {
 			return Cdnmd5Rsc::purge($olderThan, $md5hashes, $_this->config);
 		}
 		if ($_this->config['CDN']['type'] == 'S3') {
-			throw new OutOfBoundsException('Cdnmd5::purge - sorry, we have not built S3 support yet :(');
+			require_once(dirname(__file__) . '/Cdnmd5S3.php');
+			return Cdnmd5S3::purge($olderThan, $md5hashes, $_this->config);
 		}
 		throw new OutOfBoundsException('Cdnmd5::purge - unknown CDN type');
 	}
@@ -746,7 +751,8 @@ Class Cdnmd5 {
             return Cdnmd5Rsc::delete($filepath, $_this->config);
         }
         if ($_this->config['CDN']['type'] == 'S3') {
-            throw new OutOfBoundsException('Cdnmd5::delete - sorry, we have not built S3 support yet :(');
+            require_once(dirname(__file__) . '/Cdnmd5S3.php');
+            return Cdnmd5S3::delete($filepath, $_this->config);
         }
         throw new OutOfBoundsException('Cdnmd5::delete - unknown CDN type');
     }
@@ -769,7 +775,9 @@ Class Cdnmd5 {
             return Cdnmd5Rsc::details($filepath, $_this->config);
         }
         if ($_this->config['CDN']['type'] == 'S3') {
-            throw new OutOfBoundsException('Cdnmd5::fileDetails - sorry, we have not built S3 support yet :(');
+            // Coming in as the full URL, the s3 directory is already prepended
+            require_once(dirname(__file__) . '/Cdnmd5S3.php');
+            return Cdnmd5S3::details($filepath, $_this->config);
         }
         throw new OutOfBoundsException('Cdnmd5::fileDetails - unknown CDN type');
     }
