@@ -40,13 +40,9 @@
  * Installation:
  *
  *
- * If using with Rackspace Files CDN:
+ * Requires the AWS SDK for the S3 transfer adapter (pulled in via composer):
  *
- *   git submodule add git://github.com/zeroasterisk/php-opencloud.git app/vendors/php-opencloud
- *
- * If using with Amazon Web Services, S3:
- *
- *   ((TODO))
+ *   composer require aws/aws-sdk-php
  *
  *
  * Usage:
@@ -89,20 +85,24 @@ Class Cdnmd5 {
 			'path' => /* APP */ 'Config/cdnmd5/',
 		),
 		'CDN' => array(
-			'type' => 'RSC',
-			// the CDN container
-			'container' => 'cdnmd5',
-			// the domain should be the domain to the CDN
+			'type' => 'S3',
+			// the S3 bucket which backs the CDN
+			'bucket' => 'yourbucket',
+			'region' => 'us-east-1',
+			// optional top-level directory inside the bucket
+			//'directory' => 'cdnmd5',
+			// ACL applied to transferred objects
+			'acl' => 'public-read',
+			// the domain should be the domain to the CDN (eg: CloudFront)
 			//   this could be a cname alias or the CDN provided domain
 			//   NOTE: https URLs and http URLs may differ
-			'http' => 'http://aaaaaaaa.rackcdn.com',
+			'http' => 'http://aaaaaaaa.cloudfront.net',
 			//   NOTE: https URLs may not work with a cname (certs)
-			'https' => 'https://bbbbbbbb.rackcdn.com',
+			'https' => 'https://aaaaaaaa.cloudfront.net',
 			// auth information for API
 			'auth' => array(
-				'username' => 'yourusername',
-				'key' => 'yourapikey',
-				//'account' => 'youraccountnumber', // not needed anymore
+				'access_key' => 'youraccesskey',
+				'secret_key' => 'yoursecretkey',
 			),
 		),
 		// configuration for purging/cleanup
@@ -568,10 +568,6 @@ Class Cdnmd5 {
 			$cdnfilename = $_this->getCdnfilename($filepathInit);
 		}
 		// transfer the file
-		if ($_this->config['CDN']['type'] == 'RSC') {
-			require_once(dirname(__file__) . '/Cdnmd5Rsc.php');
-			return Cdnmd5Rsc::transfer($filepath, $cdnfilename, $_this->config);
-		}
 		if ($_this->config['CDN']['type'] == 'S3') {
 			require_once(dirname(__file__) . '/Cdnmd5S3.php');
 			return Cdnmd5S3::transfer($filepath, $cdnfilename, $_this->config);
@@ -609,10 +605,6 @@ Class Cdnmd5 {
 		$dir = $ConfigDir->read();
 		foreach ($dir[1] as $filename) {
 			$md5hashes[] = file_get_contents($ConfigDir->path . $filename);
-		}
-		if ($_this->config['CDN']['type'] == 'RSC') {
-			require_once(dirname(__file__) . '/Cdnmd5Rsc.php');
-			return Cdnmd5Rsc::purge($olderThan, $md5hashes, $_this->config);
 		}
 		if ($_this->config['CDN']['type'] == 'S3') {
 			require_once(dirname(__file__) . '/Cdnmd5S3.php');
@@ -746,10 +738,6 @@ Class Cdnmd5 {
 
         $_this = Cdnmd5::getInstance($config);
 
-        if ($_this->config['CDN']['type'] == 'RSC') {
-            require_once(dirname(__file__) . '/Cdnmd5Rsc.php');
-            return Cdnmd5Rsc::delete($filepath, $_this->config);
-        }
         if ($_this->config['CDN']['type'] == 'S3') {
             require_once(dirname(__file__) . '/Cdnmd5S3.php');
             return Cdnmd5S3::delete($filepath, $_this->config);
@@ -770,10 +758,6 @@ Class Cdnmd5 {
 
         $_this = Cdnmd5::getInstance($config);
 
-        if ($_this->config['CDN']['type'] == 'RSC') {
-            require_once(dirname(__file__) . '/Cdnmd5Rsc.php');
-            return Cdnmd5Rsc::details($filepath, $_this->config);
-        }
         if ($_this->config['CDN']['type'] == 'S3') {
             // Coming in as the full URL, the s3 directory is already prepended
             require_once(dirname(__file__) . '/Cdnmd5S3.php');
