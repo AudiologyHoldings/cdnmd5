@@ -5,8 +5,5 @@
   "require": {
     "cakephp/cakephp": ">=2.5.5.4 <3.0.0",
     "aws/aws-sdk-php": "^3.300"
-  },
-  "suggest": {
-    "rackspace/php-opencloud": "Only needed for the legacy RSC (Rackspace) adapter, Lib/Cdnmd5Rsc.php. ~1.6.0"
   }
 }

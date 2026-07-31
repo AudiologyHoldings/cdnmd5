@@ -25,24 +25,6 @@ $config = array(
 			'path' => /* APP */ 'Config/cdnmd5/',
 		),
 		// configuration for the CDN
-		/* // RSC example
-        'CDN' => array(
-			'type' => 'RSC',
-			// the CDN container
-			'container' => 'cdnmd5',
-			// the domain should be the domain to the CDN
-			//   this could be a cname alias or the CDN provided domain
-			//   NOTE: https URLs and http URLs may differ
-			'http' => 'http://aaaaaaaa.rackcdn.com',
-			//   NOTE: https URLs may not work with a cname (certs)
-			'https' => 'https://bbbbbbbb.rackcdn.com',
-			// auth information for API
-			'auth' => array(
-				'username' => 'yourusername',
-				'key' => 'yourapikey',
-				//'account' => 'youraccountnumber', // not needed anymore
-			),
-		),*/
         // S3 example
         'CDN' => array(
             'type' => 'S3',
