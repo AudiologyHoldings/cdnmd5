@@ -69,12 +69,9 @@ Requirements:
 1. php5
 2. php5-curl
 3. CakePHP (could be decoupled with a little bit of work)
+4. aws/aws-sdk-php (for the S3 transfer adapter, pulled in via composer)
 
 (CakePHP 1.3, CakePHP 2x versions available, switch branches)
-
-NOTE: submodules added for API Libs, inside plugin/vendors
-
-git://github.com/zeroasterisk/php-opencloud.git -> [plugindir]/vendors/php-opencloud
 
 Installation:
 -------------------

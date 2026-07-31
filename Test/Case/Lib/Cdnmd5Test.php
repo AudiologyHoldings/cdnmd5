@@ -1,7 +1,7 @@
 <?php
 /**
  * This is a test for the Cdnmd5 Lib
- * It requires funcitonality on the Cdnmd5Rsc Lib
+ * It requires funcitonality on the Cdnmd5S3 Lib
  *   (an adaptor extension of this)
  *
  */
@@ -257,14 +257,14 @@ class Cdnmd5Test extends CakeTestCase {
 	}
 
 	/**
-	 * Currently only setup on RSC and the config should be cleaned
+	 * Currently only setup on S3 and the config should be cleaned
 	 */
 	public function test_transfer() {
 		$this->assertTrue(Cdnmd5::transfer($this->testfile_js));
 	}
 
 	/**
-	 * Currently only setup on RSC
+	 * Currently only setup on S3
 	 */
 	public function test_purge() {
 		$purgedFilesInt = Cdnmd5::purge('-1 day');
